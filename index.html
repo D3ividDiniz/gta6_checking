@@ -3,8 +3,351 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTA VI - Launch Countdown</title>
+    </head>
+<body>
+    <script>
+        const template1 = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTA VI - Launch Countdown</title>
+    <script src="https://cdn.tailwindcss.com"><\/script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for the neon vibe and animations */
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background-color: #0a0a0a; /* Very dark background */
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Hide scrollbars if particles go off-screen */
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .neon-text-pink {
+            color: #ff00ff; /* Neon Pink */
+            text-shadow:
+                0 0 5px #ff00ff,
+                0 0 10px #ff00ff,
+                0 0 20px #ff00ff,
+                0 0 40px #ff00ff,
+                0 0 80px #ff00ff;
+            animation: flickerPink 1.5s infinite alternate;
+        }
+
+        .neon-text-blue {
+            color: #00ffff; /* Neon Blue */
+            text-shadow:
+                0 0 5px #00ffff,
+                0 0 10px #00ffff,
+                0 0 20px #00ffff,
+                0 0 40px #00ffff,
+                0 0 80px #00ffff;
+            animation: flickerBlue 2s infinite alternate;
+        }
+        
+        .neon-text-green {
+            color: #39ff14; /* Neon Green */
+            text-shadow:
+                0 0 5px #39ff14,
+                0 0 10px #39ff14,
+                0 0 20px #39ff14,
+                0 0 40px #39ff14,
+                0 0 80px #39ff14;
+        }
+
+        .countdown-segment {
+            background-color: rgba(20, 20, 20, 0.7); /* Dark semi-transparent background */
+            border: 2px solid #00ffff; /* Neon blue border */
+            box-shadow: 0 0 15px #00ffff, inset 0 0 10px #00ffff;
+            padding: 1rem 1.5rem; /* Adjusted padding for better mobile view */
+            margin: 0.5rem;
+            border-radius: 10px;
+            min-width: 100px; /* Ensure segments have a minimum width */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .countdown-segment:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 0 25px #ff00ff, inset 0 0 15px #ff00ff; /* Pink glow on hover */
+            border-color: #ff00ff;
+        }
+
+        .countdown-number {
+            font-size: 2.5rem; /* Responsive font size */
+        }
+
+        .countdown-label {
+            font-size: 0.75rem; /* Responsive font size */
+            margin-top: 0.5rem;
+            color: #aaa;
+        }
+
+        @keyframes flickerPink {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                text-shadow:
+                    0 0 4px #ff00ff,
+                    0 0 11px #ff00ff,
+                    0 0 19px #ff00ff,
+                    0 0 40px #ff00ff,
+                    0 0 80px #ff00ff,
+                    0 0 90px #ff00ff,
+                    0 0 100px #ff00ff,
+                    0 0 150px #ff00ff;
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes flickerBlue {
+            0%, 15%, 23%, 28%, 50%, 59%, 100% {
+                text-shadow:
+                    0 0 5px #00ffff,
+                    0 0 10px #00ffff,
+                    0 0 20px #00ffff,
+                    0 0 40px #00ffff,
+                    0 0 80px #00ffff;
+                opacity: 1;
+            }
+            18%, 26%, 53% {
+                text-shadow: none;
+                opacity: 0.7;
+            }
+        }
+        
+        /* Background starfield animation */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Behind all other content */
+            pointer-events: none; /* Allows clicks to pass through */
+        }
+
+        .gta-title {
+            font-size: 3rem; /* Base size */
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem; /* Space below title */
+            line-height: 1.2;
+        }
+        .gta-subtitle {
+            font-size: 1.25rem; /* Base size */
+            margin-bottom: 2rem; /* Space below subtitle */
+            color: #ccc;
+        }
+
+        .footer-text {
+            margin-top: 3rem;
+            font-size: 0.7rem;
+            color: #555;
+            animation: pulse 3s infinite ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .gta-title {
+                font-size: 2.5rem; /* Smaller for mobile */
+            }
+            .gta-subtitle {
+                font-size: 1rem; /* Smaller for mobile */
+            }
+            .countdown-container {
+                flex-direction: column; /* Stack segments vertically on small screens */
+                align-items: center;
+            }
+            .countdown-segment {
+                padding: 0.8rem 1rem;
+                margin: 0.5rem 0; /* Vertical margin */
+                min-width: 180px; /* Wider for stacked view */
+            }
+            .countdown-number {
+                font-size: 2rem;
+            }
+            .countdown-label {
+                font-size: 0.65rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .gta-title {
+                font-size: 1.8rem; /* Even smaller for very small screens */
+            }
+            .gta-subtitle {
+                font-size: 0.9rem;
+            }
+            .countdown-segment {
+                min-width: 150px;
+            }
+            .countdown-number {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-black text-center p-4">
+
+    <canvas id="starfield"></canvas>
+
+    <header class="mb-8 md:mb-12">
+        <h1 class="gta-title">
+            <span class="neon-text-pink">GTA</span> <span class="neon-text-blue">VI</span>
+        </h1>
+        <p class="gta-subtitle neon-text-green">LAUNCHING SOON</p>
+    </header>
+
+    <main>
+        <div id="countdown" class="countdown-container flex flex-wrap justify-center items-center text-center">
+            </div>
+    </main>
+
+    <footer class="mt-12">
+        <p class="footer-text">GET READY FOR THE NEXT GENERATION OF CRIME</p>
+        <p class="text-xs text-gray-600 mt-2">&copy; <span id="currentYear"></span> Not Rockstar Games. Fan-made countdown.</p>
+    </footer>
+
+    <script>
+        // --- Starfield Animation ---
+        const starfieldCanvas = document.getElementById('starfield');
+        const ctx = starfieldCanvas.getContext('2d');
+
+        function resizeCanvas() {
+            starfieldCanvas.width = window.innerWidth;
+            starfieldCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas(); // Initial size
+
+        let stars = [];
+        const numStars = 200; // Number of stars
+
+        // Star class
+        class Star {
+            constructor() {
+                this.x = Math.random() * starfieldCanvas.width;
+                this.y = Math.random() * starfieldCanvas.height;
+                this.size = Math.random() * 2 + 0.5; // Star size
+                this.speed = Math.random() * 0.5 + 0.1; // Star speed
+                this.color = Math.random() > 0.7 ? '#00ffff' : (Math.random() > 0.5 ? '#ff00ff' : '#ffffff'); // Neon blue, pink or white
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            update() {
+                this.y += this.speed;
+                if (this.y > starfieldCanvas.height) {
+                    this.y = 0; // Reset star to top
+                    this.x = Math.random() * starfieldCanvas.width; // Randomize x position
+                }
+            }
+        }
+
+        function initStars() {
+            stars = [];
+            for (let i = 0; i < numStars; i++) {
+                stars.push(new Star());
+            }
+        }
+
+        function animateStars() {
+            ctx.clearRect(0, 0, starfieldCanvas.width, starfieldCanvas.height); // Clear canvas
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+            requestAnimationFrame(animateStars); // Loop animation
+        }
+
+        initStars();
+        animateStars();
+
+
+        // --- Countdown Timer ---
+        const countdownElement = document.getElementById('countdown');
+        // Set the launch date: May 26, 2026, 00:00:00
+        // JavaScript months are 0-indexed (January is 0, May is 4)
+        const launchDate = new Date(2026, 4, 26, 0, 0, 0).getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const timeLeft = launchDate - now;
+
+            if (timeLeft < 0) {
+                countdownElement.innerHTML = "<div class='text-4xl neon-text-pink p-8 rounded-lg bg-gray-900 border-2 border-pink-500 shadow-lg shadow-pink-500/50'>GTA VI HAS LAUNCHED!</div>";
+                // Optionally, stop star animation or change it
+                return;
+            }
+
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+            countdownElement.innerHTML = \`
+                <div class="countdown-segment">
+                    <div class="countdown-number neon-text-pink">\<span class="math-inline">\{String\(days\)\.padStart\(2, '0'\)\}</div\>
+<div class\="countdown\-label"\>Days</div\>
+</div\>
+<div class\="countdown\-segment"\>
+<div class\="countdown\-number neon\-text\-blue"\>\\$\{String\(hours\)\.padStart\(2, '0'\)\}</div\>
+<div class\="countdown\-label"\>Hours</div\>
+</div\>
+<div class\="countdown\-segment"\>
+<div class\="countdown\-number neon\-text\-pink"\>\\$\{String\(minutes\)\.padStart\(2, '0'\)\}</div\>
+<div class\="countdown\-label"\>Minutes</div\>
+</div\>
+<div class\="countdown\-segment"\>
+<div class\="countdown\-number neon\-text\-blue"\>\\</span>{String(seconds).padStart(2, '0')}</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            \`;
+        }
+
+        // Update the countdown every second
+        setInterval(updateCountdown, 1000);
+        // Initial call to display immediately
+        updateCountdown();
+
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    <\/script>
+</body>
+</html>
+        `;
+
+        const template2 = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GTA 6 Launch Countdown - Dark Edition</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"><\/script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body {
@@ -86,7 +429,7 @@
                 Disclaimer: The launch date used for this countdown (October 24, 2025) is a placeholder for demonstration purposes only.
                 The official release date for Grand Theft Auto VI has not been announced by Rockstar Games.
             </p>
-             <p class="text-xs text-gray-500 mt-1">
+            <p class="text-xs text-gray-500 mt-1">
                 Current time in Brazil: <span id="currentTimeBrazil"></span> (UTC-3)
             </p>
         </footer>
@@ -123,16 +466,16 @@
 
             // Display the result in the respective elements
             // Add leading zero if number is less than 10
-            daysEl.innerHTML = days < 10 ? '0' + days : days;
-            hoursEl.innerHTML = hours < 10 ? '0' + hours : hours;
-            minutesEl.innerHTML = minutes < 10 ? '0' + minutes : minutes;
-            secondsEl.innerHTML = seconds < 10 ? '0' + seconds : seconds;
+            if (daysEl) daysEl.innerHTML = days < 10 ? '0' + days : days;
+            if (hoursEl) hoursEl.innerHTML = hours < 10 ? '0' + hours : hours;
+            if (minutesEl) minutesEl.innerHTML = minutes < 10 ? '0' + minutes : minutes;
+            if (secondsEl) secondsEl.innerHTML = seconds < 10 ? '0' + seconds : seconds;
 
             // If the count down is finished, display a message
             if (distance < 0) {
                 clearInterval(countdownFunction);
-                countdownContainer.classList.add('hidden');
-                launchMessage.classList.remove('hidden');
+                if (countdownContainer) countdownContainer.classList.add('hidden');
+                if (launchMessage) launchMessage.classList.remove('hidden');
             }
         }, 1000);
 
@@ -145,7 +488,7 @@
                 minute: '2-digit',
                 second: '2-digit'
             });
-            currentTimeBrazilEl.textContent = `${nowInBrazil}`;
+            if (currentTimeBrazilEl) currentTimeBrazilEl.textContent = \`\${nowInBrazil}\`;
         }
 
         // Initial call to display time immediately
@@ -153,7 +496,24 @@
         // Update the Brazil time every second
         setInterval(updateBrazilTime, 1000);
 
-    </script>
+    <\/script>
 
+</body>
+</html>
+        `;
+
+        if (Math.random() < 0.5) {
+            document.open();
+            document.write(template1);
+            document.close();
+        } else {
+            document.open();
+            document.write(template2);
+            document.close();
+        }
+    </script>
+    <noscript>
+        Please enable JavaScript to view this page.
+    </noscript>
 </body>
 </html>
