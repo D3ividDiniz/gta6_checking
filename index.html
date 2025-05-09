@@ -309,19 +309,19 @@
 
             countdownElement.innerHTML = \`
                 <div class="countdown-segment">
-                    <div class="countdown-number neon-text-pink">\<span class="math-inline">\{String\(days\)\.padStart\(2, '0'\)\}</div\>
-<div class\="countdown\-label"\>Days</div\>
-</div\>
-<div class\="countdown\-segment"\>
-<div class\="countdown\-number neon\-text\-blue"\>\\$\{String\(hours\)\.padStart\(2, '0'\)\}</div\>
-<div class\="countdown\-label"\>Hours</div\>
-</div\>
-<div class\="countdown\-segment"\>
-<div class\="countdown\-number neon\-text\-pink"\>\\$\{String\(minutes\)\.padStart\(2, '0'\)\}</div\>
-<div class\="countdown\-label"\>Minutes</div\>
-</div\>
-<div class\="countdown\-segment"\>
-<div class\="countdown\-number neon\-text\-blue"\>\\</span>{String(seconds).padStart(2, '0')}</div>
+                    <div class="countdown-number neon-text-pink">\${String(days).padStart(2, '0')}</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-segment">
+                    <div class="countdown-number neon-text-blue">\${String(hours).padStart(2, '0')}</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-segment">
+                    <div class="countdown-number neon-text-pink">\${String(minutes).padStart(2, '0')}</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-segment">
+                    <div class="countdown-number neon-text-blue">\${String(seconds).padStart(2, '0')}</div>
                     <div class="countdown-label">Seconds</div>
                 </div>
             \`;
@@ -425,12 +425,13 @@
             <p class="text-xl text-gray-300 mt-4">The wait is over. Dive into the world of Grand Theft Auto VI!</p>
         </div>
 
-        <footer class="mt-12 pt-8 border-t border-gray-800/60"> <p class="text-xs text-gray-500">
-                Disclaimer: The launch date used for this countdown (October 24, 2025) is a placeholder for demonstration purposes only.
+        <footer class="mt-12 pt-8 border-t border-gray-800/60">
+            <p class="text-xs text-gray-500">
+                Disclaimer: The launch date used for this countdown (May 26, 2026) is a placeholder for demonstration purposes only.
                 The official release date for Grand Theft Auto VI has not been announced by Rockstar Games.
             </p>
             <p class="text-xs text-gray-500 mt-1">
-                Current time in Brazil: <span id="currentTimeBrazil"></span> (UTC-3)
+                Current time in Brazil: <span id="currentTimeBrazil"></span> (UTC-3 approx.)
             </p>
         </footer>
     </div>
@@ -439,8 +440,8 @@
         // --- Countdown Timer Logic ---
         // Set the date we're counting down to
         // IMPORTANT: Months are 0-indexed in JavaScript (January is 0, December is 11)
-        // October 24, 2025, 00:00:00
-        const countDownDate = new Date("Oct 24, 2025 00:00:00").getTime();
+        // May 26, 2026, 00:00:00
+        const countDownDate = new Date("May 26, 2026 00:00:00").getTime();
 
         // Get elements to display the countdown
         const daysEl = document.getElementById('days');
@@ -483,7 +484,7 @@
         const currentTimeBrazilEl = document.getElementById('currentTimeBrazil');
         function updateBrazilTime() {
             const nowInBrazil = new Date().toLocaleTimeString('pt-BR', {
-                timeZone: 'America/Sao_Paulo', // Brasilia Time Zone (UTC-3 generally, can vary)
+                timeZone: 'America/Sao_Paulo', // Brasilia Time Zone (UTC-3 generally, can vary with DST)
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit'
