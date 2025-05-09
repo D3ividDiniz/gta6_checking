@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTA 6 Launch Countdown - Dark Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Prevent scrollbars from flashing during gradient animation */
+        }
+        .countdown-number {
+            font-weight: 900; /* Extra bold for numbers */
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2), 0 0 15px rgba(236, 72, 153, 0.4); /* Glow for numbers */
+        }
+        .pulsate {
+            animation: pulsate 2s infinite alternate;
+        }
+        @keyframes pulsate {
+            0% { transform: scale(1); box-shadow: 0 0 5px #ec4899, 0 0 10px #ec4899, 0 0 15px #d946ef; }
+            100% { transform: scale(1.03); box-shadow: 0 0 10px #d946ef, 0 0 20px #ec4899, 0 0 30px #d946ef; }
+        }
+        .background-animate {
+            background-size: 400%;
+            animation: bgAnimate 20s infinite alternate;
+        }
+        @keyframes bgAnimate {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        /* Custom scrollbar for aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0D0D0D; /* Darker scrollbar track */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c026d3; /* Fuchsia/Purple to match accents */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a21caf; /* Darker fuchsia/purple on hover */
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-black via-slate-900 to-purple-900 text-white min-h-screen flex flex-col items-center justify-center p-4 selection:bg-pink-500 selection:text-white background-animate">
+
+    <div class="text-center space-y-8 w-full max-w-4xl">
+        <header class="mb-8">
+            <h1 class="text-5xl md:text-7xl font-black uppercase tracking-wider" style="text-shadow: 0 0 8px rgba(34, 211, 238, 0.7), 0 0 15px rgba(168, 85, 247, 0.5), 0 0 3px #f1f5f9;">
+                <span class="text-cyan-400">GTA</span> <span class="text-slate-100">VI</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-400 mt-2">The Countdown Has Begun</p>
+        </header>
+
+        <div id="countdown-container" class="grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-6 text-center">
+            <div class="bg-black/60 p-4 md:p-6 rounded-xl shadow-2xl border border-pink-600/70">
+                <div id="days" class="text-4xl md:text-6xl countdown-number text-pink-500">00</div>
+                <div class="text-sm md:text-lg text-gray-400 uppercase">Days</div>
+            </div>
+            <div class="bg-black/60 p-4 md:p-6 rounded-xl shadow-2xl border border-purple-600/70">
+                <div id="hours" class="text-4xl md:text-6xl countdown-number text-purple-500">00</div>
+                <div class="text-sm md:text-lg text-gray-400 uppercase">Hours</div>
+            </div>
+            <div class="bg-black/60 p-4 md:p-6 rounded-xl shadow-2xl border border-teal-500/70">
+                <div id="minutes" class="text-4xl md:text-6xl countdown-number text-teal-400">00</div>
+                <div class="text-sm md:text-lg text-gray-400 uppercase">Minutes</div>
+            </div>
+            <div class="bg-black/60 p-4 md:p-6 rounded-xl shadow-2xl border border-orange-500/70">
+                <div id="seconds" class="text-4xl md:text-6xl countdown-number text-orange-400">00</div>
+                <div class="text-sm md:text-lg text-gray-400 uppercase">Seconds</div>
+            </div>
+        </div>
+
+        <div id="launch-message" class="hidden text-center mt-12">
+            <h2 class="text-4xl md:text-5xl font-bold text-green-400 pulsate p-4 rounded-lg bg-black/80 inline-block">
+                GTA VI HAS LAUNCHED!
+            </h2>
+            <p class="text-xl text-gray-300 mt-4">The wait is over. Dive into the world of Grand Theft Auto VI!</p>
+        </div>
+
+        <footer class="mt-12 pt-8 border-t border-gray-800/60"> <p class="text-xs text-gray-500">
+                Disclaimer: The launch date used for this countdown (October 24, 2025) is a placeholder for demonstration purposes only.
+                The official release date for Grand Theft Auto VI has not been announced by Rockstar Games.
+            </p>
+             <p class="text-xs text-gray-500 mt-1">
+                Current time in Brazil: <span id="currentTimeBrazil"></span> (UTC-3)
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // --- Countdown Timer Logic ---
+        // Set the date we're counting down to
+        // IMPORTANT: Months are 0-indexed in JavaScript (January is 0, December is 11)
+        // October 24, 2025, 00:00:00
+        const countDownDate = new Date("Oct 24, 2025 00:00:00").getTime();
+
+        // Get elements to display the countdown
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+        const countdownContainer = document.getElementById('countdown-container');
+        const launchMessage = document.getElementById('launch-message');
+
+        // Update the countdown every 1 second
+        const countdownFunction = setInterval(function() {
+            // Get today's date and time
+            const now = new Date().getTime();
+
+            // Find the distance between now and the count down date
+            const distance = countDownDate - now;
+
+            // Time calculations for days, hours, minutes and seconds
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Display the result in the respective elements
+            // Add leading zero if number is less than 10
+            daysEl.innerHTML = days < 10 ? '0' + days : days;
+            hoursEl.innerHTML = hours < 10 ? '0' + hours : hours;
+            minutesEl.innerHTML = minutes < 10 ? '0' + minutes : minutes;
+            secondsEl.innerHTML = seconds < 10 ? '0' + seconds : seconds;
+
+            // If the count down is finished, display a message
+            if (distance < 0) {
+                clearInterval(countdownFunction);
+                countdownContainer.classList.add('hidden');
+                launchMessage.classList.remove('hidden');
+            }
+        }, 1000);
+
+        // --- Current Time in Brazil ---
+        const currentTimeBrazilEl = document.getElementById('currentTimeBrazil');
+        function updateBrazilTime() {
+            const nowInBrazil = new Date().toLocaleTimeString('pt-BR', {
+                timeZone: 'America/Sao_Paulo', // Brasilia Time Zone (UTC-3 generally, can vary)
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            currentTimeBrazilEl.textContent = `${nowInBrazil}`;
+        }
+
+        // Initial call to display time immediately
+        updateBrazilTime();
+        // Update the Brazil time every second
+        setInterval(updateBrazilTime, 1000);
+
+    </script>
+
+</body>
+</html>
